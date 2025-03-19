@@ -1,4 +1,8 @@
-<form name="formAltaConsulta" method ="POST" action="altaConsulta.php"
+<head>
+<link rel="stylesheet" href="css/styleForm.css">
+</head>
+
+<form name="formAltaConsulta" method ="POST" action="altaConsulta.php" class="form"
     <label> Pregunta </label>
 <input class="form-control" type="text" name="pregunta"><br/>
     <label> Respuesta </label>
@@ -10,6 +14,6 @@
     <option value = 'seguridad'> Seguridad </option>
     <option value = 'conectividad'> Conectividad </option>
 
-<input type="submit" value="aceptar">
-<input type="submit" value="cancelar">
+<input type="submit" value="Aceptar">
+<input type="submit" value="Cancelar">
 </form>
