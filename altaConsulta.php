@@ -12,6 +12,6 @@ if($stmt->execute([
 else {
     echo"El registro no pudo cargarse";
 }
+echo "<br/><a name='volver' href='listarConsulta.php'>Volver</a>"
 
-
-?>
+?>  
