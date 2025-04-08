@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5e6c3;
+    background-color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,7 +41,7 @@ body {
 }
 
 .form input[type="submit"] {
-    background-color: #69533a;  /* #28a745: verde*/
+    background-color:    #28a745;
     color: white;
 }
 
@@ -51,7 +51,7 @@ body {
 }
 
 .form input[type="submit"]:hover {
-    background-color: #885b21;    /* 218838 : verde*/
+    background-color:  white ;
 }
 
 .form input[type="button"]:hover {

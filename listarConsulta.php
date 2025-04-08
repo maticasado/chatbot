@@ -11,7 +11,10 @@ foreach($consultas as $consulta ){
     echo"<b>Respuesta</b>",$consulta['respuesta']."<br/>";
     echo"<b>Categoria</b>",$consulta['categoria']."<br/>";
     echo"<br/>";
-    echo"<a name='actualizar' href=formEditarConsulta.php?id=".$consulta['id']."'>Actualizar</a>";
+    echo"<a name='actualizar' href='formEditarConsulta.php?id=".$consulta['id']."'>Actualizar</a>";
+    echo"<br/>"; 
+    echo"<a name='eliminar' href='eliminarConsulta.php?id=".$consulta['id']."'>Eliminar</a>";
     echo"<br/>"; 
 }
+
 ?>
