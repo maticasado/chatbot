@@ -26,41 +26,48 @@ nav a {
 
 main {
     padding: 2em;
-    font-weight: bold;
-}
-h2{
-    color: white;
 }
 
-form.form {
-    background-color: #f1f1f1;
-    padding: 2em;
-    border-radius: 10px;
-    max-width: 600px;
+.consulta-list {
+    max-width: 800px;
     margin: 0 auto;
 }
 
-.form-control {
-    width: 100%;
-    padding: 0.6em;
-    margin-top: 0.5em;
-    margin-bottom: 1em;
+.consulta {
+    background-color: #f1f1f1;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
+    padding: 1.5em;
+    margin-bottom: 1.5em;
+    text-align: center;
 }
 
-.btn-submit {
+.consulta p {
+    margin: 0.5em 0;
+    font-size: 1.1em;
+}
+
+.acciones {
+    margin-top: 1em;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5em 1em;
+    margin: 0.5em;
     background-color: #2a9d8f;
     color: white;
-    padding: 0.8em 1.5em;
-    border: none;
+    text-decoration: none;
     border-radius: 5px;
-    cursor: pointer;
     font-weight: bold;
 }
 
-.btn-submit:hover {
-    background-color: #21867a;
+.btn.eliminar {
+    background-color: #e76f51;
+}
+
+.btn:hover {
+    opacity: 0.9;
 }
 
 footer {

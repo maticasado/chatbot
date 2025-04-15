@@ -1,40 +1,72 @@
 <?php
-//conectar a base de dato
+// Conectar a la base de datos
 include("conexion.php");
 
-//armar la consulta
-$sql="SELECT * FROM consultas WHERE id=(:id)";
+// Armar la consulta
+$sql = "SELECT * FROM consultas WHERE id=(:id)";
 
-//ejecutar la consulta 
-$stmt= $pdo->prepare($sql);
-$stmt->execute(['id'=> $_GET['id']]);
+// Ejecutar la consulta
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['id' => $_GET['id']]);
 
-//mostrar los datos
-if( $consulta = $stmt-> fetch(PDO::FETCH_ASSOC) ) {
+// Mostrar los datos
+if ($consulta = $stmt->fetch(PDO::FETCH_ASSOC)) {
 ?>
-<form name="formEditarConsulta" method ="POST" action="editarConsulta.php" class="form"
-    <label> Id: <label>
-        <input type="text" name= "id" value="<?=$consulta['id'];?>" readonly> <br/>
-    <label> Pregunta </label>
-<input class="form-control" type="text" name="pregunta" value="<?=$consulta['pregunta'];?>"><br/>
-    <label> Respuesta </label>
-<input class="form-control" type="text" name="respuesta" value="<?=$consulta['respuesta'];?>"><br/>
-    <select name = "categoria">
-        <option value ="<?=$consulta ['categoria'];?>" selected> <?=$consulta['categoria'];?></option>
-        <option value = 'sistema operativo'> Sistema operativo </option>
-        <option value = 'software'> Software  </option>
-        <option value = 'hardware'> Hardware </option>
-        <option value = 'seguridad'> Seguridad </option>
-        <option value = 'conectividad'> Conectividad </option>
-    </select>
-<input type="submit" value="Aceptar">
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Consulta</title>
+    <link rel="stylesheet" href="css/styleformEditarConsulta.css">
+</head>
+<body>
 
+    <header>
+        <h1>Editar Consulta</h1>
+    </header>
+
+    <nav>
+        <a href="index.php">Home</a>
+        <a href="formAltaConsulta.php">Hacer una pregunta</a>
+        <a href="listarConsulta.php">Preguntas hechas</a>
+    </nav>
+
+    <main>
+        <section class="form-container">
+            <form name="formEditarConsulta" method="POST" action="editarConsulta.php" class="form">
+                <label> Id: </label>
+                <input type="text" name="id" value="<?=$consulta['id'];?>" readonly><br/>
+
+                <label> Pregunta </label>
+                <input class="form-control" type="text" name="pregunta" value="<?=$consulta['pregunta'];?>"><br/>
+
+                <label> Respuesta </label>
+                <input class="form-control" type="text" name="respuesta" value="<?=$consulta['respuesta'];?>"><br/>
+
+                <label> Categoría </label>
+                <select name="categoria">
+                    <option value="<?=$consulta['categoria'];?>" selected><?=$consulta['categoria'];?></option>
+                    <option value="sistema operativo">Sistema operativo</option>
+                    <option value="software">Software</option>
+                    <option value="hardware">Hardware</option>
+                    <option value="seguridad">Seguridad</option>
+                    <option value="conectividad">Conectividad</option>
+                </select><br/>
+
+                <input type="submit" value="Actualizar Consulta">
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sistema de Gestión de Consultas - Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>
 <?php
-}
-else
-{
-    echo "el registro seleccionado, no existe";
-    echo "<a href='listarConsulta.php'>";
+} else {
+    echo "El registro seleccionado no existe.";
+    echo "<a href='listarConsulta.php'>Volver al listado</a>";
 }
 ?>
