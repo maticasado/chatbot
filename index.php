@@ -40,8 +40,8 @@
         </div>
         <!-- Más mensajes pueden ir aquí dinámicamente -->
     </div>
-    <form class="chat-input" method="POST" action="procesarMensaje.php">
-        <input type="text" name="mensaje" placeholder="Escribe algo aquí..." required />
+    <form class="chat-input" method="POST" >
+        <input id="data" type="text" name="mensaje" placeholder="Escribe algo aquí..." required />
         <button type="submit">Enviar</button>
     </form>
     </div>
@@ -57,7 +57,25 @@
 <script>
     $(document).ready(function(){
         $("#send-btn").on("click", function(){
-
+            $valor= $("#data").val(); //tomo el valor guardado en el campo input y lo guardo en la variable valor 
+            $msg='<div class="user-inbox- inbox"> <div class="msg-header"><p>'+$valor+'</p></div>';
+            $(".form").append($msg);
+            $("#data").val('');
+            //iniciamos el codigo AJAX
+            $.ajax({
+                url:'respuesta.php',
+                type:'POST',
+                data:'text='+ $valor,
+                success: function(result){
+                    //armo el html con la respuesta que viene del servidor
+                    $respuesta=
+                        '<div class="chat-message bot">'+result+'</div>';
+                        //lo agrego dentro del div cuya clase es form
+                        $(".form").append($respuesta);
+                        //cuando el chat baja, se desplaza hacia el final 
+                        $(".form").scrollTop( $(".form")[0].scrollHeight);
+                }
+            });
         });
     });
 </script>
