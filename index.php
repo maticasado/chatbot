@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión de Consultas</title>
-    <link rel="stylesheet" href="css/styleIndex.css">
-    <link rel="stylesheet" href= css/styleChat.css">
+    <link rel="stylesheet" href="css/styleIndex.css"></link>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
    
@@ -42,7 +41,7 @@
     </div>
     <form class="chat-input" method="POST" >
         <input id="data" type="text" name="mensaje" placeholder="Escribe algo aquí..." required />
-        <button type="submit">Enviar</button>
+        <button id="send-btn">Enviar</button>
     </form>
     </div>
 
@@ -58,8 +57,8 @@
     $(document).ready(function(){
         $("#send-btn").on("click", function(){
             $valor= $("#data").val(); //tomo el valor guardado en el campo input y lo guardo en la variable valor 
-            $msg='<div class="user-inbox- inbox"> <div class="msg-header"><p>'+$valor+'</p></div>';
-            $(".form").append($msg);
+            $msg='<div class="chat-message user">'+ $valor +'</div>';
+            $(".chat-box").append($msg);
             $("#data").val('');
             //iniciamos el codigo AJAX
             $.ajax({
@@ -67,13 +66,14 @@
                 type:'POST',
                 data:'text='+ $valor,
                 success: function(result){
+                    console.log(result);
                     //armo el html con la respuesta que viene del servidor
                     $respuesta=
                         '<div class="chat-message bot">'+result+'</div>';
                         //lo agrego dentro del div cuya clase es form
-                        $(".form").append($respuesta);
+                        $(".chat-box").append($respuesta);
                         //cuando el chat baja, se desplaza hacia el final 
-                        $(".form").scrollTop( $(".form")[0].scrollHeight);
+                        $(".chat-box").scrollTop( $(".chat-box")[0].scrollHeight);
                 }
             });
         });

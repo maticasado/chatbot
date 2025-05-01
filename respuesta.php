@@ -6,12 +6,14 @@ $mensaje= $_POST['text'] ??'';
 // Armo la consulta 
 $sql="SELECT respuesta FROM consultas WHERE pregunta like :pregunta";
 // Ejecutamos la consulta 
-$stmt= $pdo ->prepare(sql);
-$stmt ->execute(['pregunta'=>"%mensaje%"]);
+$stmt= $pdo ->prepare($sql);
+$stmt->execute(['pregunta' => "%$mensaje%"]);//$stmt->execute(['pregunta' => "%mensaje%"]);
+
+
 // Si nos trae al menos un resultado
 if($stmt->rowCount()>0){
     // Tomamos el primer valor que nos devuelve la consulta a la base de datos.
-    $fetch_data= $stmt->fecth(PDO::FECTH_ASSOC);
+    $fetch_data= $stmt ->fetch(PDO::FETCH_ASSOC);
     $respuesta= $fetch_data['respuesta'];
     // Se la enciamos al cliente, para que se muestre en el chat 
     echo $respuesta;
