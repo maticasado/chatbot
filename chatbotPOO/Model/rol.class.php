@@ -22,7 +22,8 @@ class Rol {
 
     // Método estático para obtener todos los roles de la base de datos
     public static function obtenerTodxs() {
-        $conexion = Database::getInstance()->getConnection();
+        $conexion = Database::getInstance()->getConnection();  
+        $sql = "SELECT * FROM roles";
         $stmt = $conexion->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -67,6 +68,17 @@ class Rol {
     }
 
     // Método sin implementar
-    public function obtenerPorId() {}
+    public static function obtenerPorId($id) {
+        $sql = "SELECT * FROM roles WHERE id = ?";
+        $conexion = Database::getInstance()->getConnection();
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([$id]); 
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($resultado)  {
+            return new Rol($resultado['id'], $resultado['nombre']);
+        }       
+        return null;
+    }
+   
 }
 ?>

@@ -7,7 +7,7 @@ class Database {
     // Atributos de conexión
     private $nombre = "chatbot_2";
     private $servidor = "localhost";
-    private $usuario = "admin";
+    private $usuario = "root";
     private $clave = "";
     private $conexion;
 
