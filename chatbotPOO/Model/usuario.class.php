@@ -27,9 +27,9 @@ class Usuarios {
     }
 
     public function actualizar() {
-        $sql = "UPDATE usuarios SET nombre = ?, email = ?, password = ?, rol = ? WHERE id = ?";
+        $sql = "UPDATE usuarios SET nombre = ?, email = ?, password = ?, rol_id = ? WHERE id = ?";
         $stmt = $this->conexion->prepare($sql);
-        return $stmt->execute([$this->nombre, $this->email, $this->password, $this->rol, $this->id]);
+        return $stmt->execute([$this->nombre, $this->email, $this->password, $this->rol_id, $this->id]);
     }
 
     public function eliminar() {
@@ -40,26 +40,61 @@ class Usuarios {
 
     public static function obtenerTodos() { 
         $conexion = Database::getInstance()->getConnection();
+        $sql ="SELECT * FROM usuarios";
         $stmt = $conexion->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function obtenerPorId() {
+    public static function obtenerPorId($id) {
         $sql = "SELECT * FROM usuarios WHERE id = ?";
-        $stmt = $this->conexion->prepare($sql);
-        return $stmt->execute([$this->id]);
+        $conexion = Database::getInstance()->getConnection();
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([$id]); 
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($resultado)  {
+            return new Usuarios($resultado['id'], $resultado['nombre'], $resultado['email'], $resultado['password'], $resultado['rol_id']);
+        }       
+        return null;
     }
 
-    public static function obtenerPorEmail() {
-        $sql = "SELECT * FROM usuarios WHERE email = ?";
-        $stmt = $this->conexion->prepare($sql);
-        return $stmt->execute([$this->email]);  
+
+    public static function obtenerPorEmail($email) {
+        $sql = "SELECT * FROM usuarios WHERE email = ? LIMIT 1";
+        $conexion = Database::getInstance()->getConnection();
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([$email]); 
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($resultado)  {
+            return new Usuarios($resultado['id'], $resultado['nombre'], $resultado['email'], $resultado['password'], $resultado['rol_id']);
+        }       
+        return null;
+    }
+    
+    public static function verificarLogin($email, $password) {
+        $usuario = self::obtenerPorEmail($email);
+        if ($usuario) {
+            // Comparar la contraseña ingresada con el hash en la BD
+            if (password_verify($password, $usuario->password)) {
+                return $usuario; // Login correcto
+            }
+        }
+        return false; // Login fallido
     }
 
-    public static function verificarLogin() {
-        $sql = "SELECT * FROM usuarios WHERE email = ? AND password = ?";
-        $stmt = $this->conexion->prepare($sql);
-        return $stmt->execute([$this->email, $this->password]); 
+    public function getId() {
+        return $this->id;
+    }
+    public function getNombre() {
+        return $this->nombre;
+    }
+    public function getEmail() {
+        return $this->email;
+    }
+    public function getPassword() {
+        return $this->password;
+    }
+    public function getRolId() {
+        return $this->rol_id;
     }
 }
 

@@ -2,7 +2,7 @@
 include "Model/usuario.class.php";
 
 if (isset($_GET['id'])) {
-    $usuario = Usuario::obtenerPorId($_GET['id']);
+    $usuario = usuarios::obtenerPorId($_GET['id']);
     if (!$usuario) {
         echo "No se ha encontrado el usuario";
         exit;
@@ -10,7 +10,7 @@ if (isset($_GET['id'])) {
 ?>
 
 <h2>Editar Usuario</h2>
-<form name="formEditarUsuario" method="post" action="controller/usuario.controller.php">
+<form name="formEditarUsuario" method="post" action="Controller/usuario.controller.php">
     <input type="hidden" name="operacion" value="actualizar"/>
     <input type="hidden" name="id" value="<?= $usuario->getId(); ?>">
 
@@ -24,9 +24,15 @@ if (isset($_GET['id'])) {
     <input type="password" name="password">
 
     <label for="rol">Rol ID:</label>
-    <input type="text" name="rol" value="<?= $usuario->getRolId(); ?>" required>
-
-    <input type="submit" value="Actualizar Usuario">
+    <select name="rol">
+        <?php
+            include "Model/rol.class.php";
+            $roles = Rol::obtenerTodxs();
+            foreach ($roles as $rol) {
+                echo "<option value='" . $rol['id'] . "'>" . $rol['nombre'] . "</option>";
+            }
+        ?>
+    </select>
 </form>
 
 <a href="listarUsuario.php">Volver</a>

@@ -1,7 +1,7 @@
 <?php
-include_once(__DIR__ . '/../Model/rol.class.php');
+include"Model/usuario.class.php";
 
-$usuarios = Usuarios::obtenerTodxs(); // <- Este método debe obtener todos los usuarios con sus datos y roles
+$usuarios = Usuarios::obtenerTodos(); // <- Este método debe obtener todos los usuarios con sus datos y roles
 ?>
 
 <h2 style="text-align: center;">Lista de Usuarios</h2>

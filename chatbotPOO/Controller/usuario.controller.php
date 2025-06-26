@@ -6,7 +6,7 @@ $operacion=$_POST['operacion'];
         $result=$usuario->guardar();
     }else if($operacion=="actualizar"){
         $usuario= new Usuarios($_POST['id'], $_POST['nombre'], $_POST['email'], $_POST['password'], $_POST['rol']);
-        $result=$usuario->acturalizar();
+        $result=$usuario->actualizar();
     }else if($operacion=="eliminar"){
         $usuario= new Usuarios($_POST['id'], null, null, null, null);
         $result=$usuario->eliminar();

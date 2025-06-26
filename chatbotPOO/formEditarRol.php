@@ -2,10 +2,14 @@
 include "Model/rol.class.php";
 if(isset($_GET['id'])){
     $rol = Rol::obtenerPorId($_GET['id']);
+    if (!$rol) {
+        echo "No se ha encontrado el rol";
+        exit;
+    }
 ?>
 
 <h2>Editar Rol</h2>
-<form name="formEditarRol" method="post" action="controller/rol.controller.php">
+<form name="formEditarRol" method="post" action="Controller/rol.controller.php">
     <input type="hidden" name="operacion" value="actualizar"/>
     <label for="id">ID:</label>
     <input type="text" name="id" value="<?= $rol->getID(); ?>" readonly>
