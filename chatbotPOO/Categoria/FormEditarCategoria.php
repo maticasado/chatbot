@@ -1,0 +1,10 @@
+<form action="editarCategoria.php" method="post">
+    <label>Nombre:</label>
+    <input type="text" name="nombre" value="<?php echo $_POST['nombre']; ?>">
+    <br>
+    <label>Descripcion:</label>
+    <input type="text" name="descripcion" value="<?php echo $_POST['descripcion']; ?>">
+    <br>
+    <input type="submit" name="operacion" value="Actualizar">
+    <input type="submit" name="operacion" value="Cancelar">
+</form>
