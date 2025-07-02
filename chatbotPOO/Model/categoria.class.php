@@ -1,49 +1,48 @@
 <?php
+require_once "database.class.php";
 
 class Categoria {
-    // Atributos
-    private int $id;
-    private string $nombre;
-    private Database $conexion;
+    private $id;
+    private $nombre;
+    private $descripcion;
 
-    // Métodos
-    public function __construct() {}
+    public function __construct($id = null, $nombre = null, $descripcion = null) {
+        $this->id = $id;
+        $this->nombre = $nombre;
+        $this->descripcion = $descripcion;
+    }
 
     public function guardar() {
-        $this->conexion = new Database();
-        $this->conexion->conectar();
-        $query = "INSERT INTO categoria (nombre, descripcion) VALUES (:nombre, :descripcion)";
-        $stmt = $this->conexion->prepare($query);
-        $stmt->bindParam(':nombre', $this->nombre);
-        $stmt->bindParam(':descripcion', $this->descripcion);
-        $stmt->execute();
-        return $stmt->rowCount();   
+    $sql = "INSERT INTO categorias (nombre, descripcion) VALUES (?, ?)";
+        $stmt = $conexion->prepare($sql);
+        //$stmt->bindParam(':nombre', $this->nombre);
+        //$stmt->bindParam(':descripcion', $this->descripcion);
+        return $stmt->execute([this->nombre, this->descripcion]);
+        //return $stmt->rowCount();   
     }
 
     public static function obtenerTodas() {
-        $this->conexion = new Database();
-        $this->conexion->conectar();
-        $query = "SELECT * FROM categoria";
-        $stmt = $this->conexion->prepare($query);
+        $sql = "SELECT * FROM categorias";
+        $conexion = Database::getConnection();
+        $stmt = $conexion->prepare($sql);
         $stmt->execute();   
         return $stmt->fetchAll();
     }
 
     public static function obtenerPorId($id) {
-        $this->conexion = new Database();
-        $this->conexion->conectar();
-        $query = "SELECT * FROM categoria WHERE id = :id";
-        $stmt = $this->conexion->prepare($query);
+        $conexion = Database::getConnection();
+        $sql = "SELECT * FROM categorias WHERE id = :id";
+        $stmt = $conexion->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         return $stmt->fetch();
     }
 
     public function actualizar() {
-        $this->conexion = new Database();
-        $this->conexion->conectar();
-        $query = "UPDATE categoria SET nombre = :nombre, descripcion = :descripcion WHERE id = :id";
-        $stmt = $this->conexion->prepare($query);
+        $db = new Database();
+        $conexion = $db->getPDO();
+        $sql = "UPDATE categorias SET nombre = :nombre, descripcion = :descripcion WHERE id = :id";
+        $stmt = $conexion->prepare($sql);
         $stmt->bindParam(':nombre', $this->nombre);
         $stmt->bindParam(':descripcion', $this->descripcion);
         $stmt->bindParam(':id', $this->id);
@@ -52,14 +51,13 @@ class Categoria {
     }
 
     public function eliminar() {
-        $this->conexion = new Database();
-        $this->conexion->conectar();
-        $query = "DELETE FROM categoria WHERE id = :id";
-        $stmt = $this->conexion->prepare($query);
+        $db = new Database();
+        $conexion = $db->getPDO();
+        $sql = "DELETE FROM categorias WHERE id = :id";
+        $stmt = $conexion->prepare($sql);
         $stmt->bindParam(':id', $this->id);
         $stmt->execute();
         return $stmt->rowCount();
     }
 }
-
 ?>

@@ -1,5 +1,5 @@
 <?php
-include "../Model/usuario.class.php";
+require_once "../Model/usuario.class.php";
 $operacion=$_POST['operacion'];
  if ($operacion=="guardar") {
         $usuario= new Usuarios(null, $_POST['nombre'], $_POST['email'], $_POST['password'], $_POST['rol']);

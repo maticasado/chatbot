@@ -1,5 +1,4 @@
 <?php
-
 class Database {
     // Instancia única (singleton)
     private static $instancia = null;
@@ -12,6 +11,10 @@ class Database {
     private $conexion;
 
     // Constructor privado: establece conexión usando PDO
+    public function getPDO() {
+        return $this->conexion;
+    }
+        
     public function __construct() {
         try {
             $dsn = "mysql:host={$this->servidor};dbname={$this->nombre};charset=utf8";
@@ -31,9 +34,10 @@ class Database {
     }
 
     // Devuelve la conexión PDO
-    public function getConnection() {
-        return $this->conexion;
+    public static function getConnection() {
+        return self::getInstance()->conexion;
     }
+     
 
     // Métodos vacíos para ejecutar consultas
     public function execute() {}
