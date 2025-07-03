@@ -16,17 +16,14 @@ if($categorias == null){
     <tr>
         <th>ID</th>
         <th>Nombre</th>
-        <th>descripcion</th>
         <th>Acciones</th>
     </tr>
     <?php foreach ($categorias as $categoria){ ?>
     <tr>
         <td><?= $categoria['id'] ?></td>
         <td><?= $categoria['nombre'] ?></td>
-        <td><?= $categoria['descripcion'] ?></td>
         <td>
-            <a href="formEditarCategoria.php?id=<?= $categoria['id'] ?>">Editar</a>
-
+        <a href="formEditarCategoria.php?id=<?= $categoria['id'] ?>&nombre=<?= urlencode($categoria['nombre']) ?>">Editar</a>
             <form action="controller/categoria.controller.php" method="post">
                 <input type="hidden" name="operacion" value="eliminar">
                 <input type="hidden" name="id" value="<?= $categoria['id'] ?>">

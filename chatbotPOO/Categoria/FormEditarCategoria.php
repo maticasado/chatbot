@@ -1,9 +1,7 @@
-<form action="editarCategoria.php" method="post">
+<form action="../Controller/categoria.controller.php" method="post">
     <label>Nombre:</label>
-    <input type="text" name="nombre" value="<?php echo $_POST['nombre']; ?>">
-    <br>
-    <label>Descripcion:</label>
-    <input type="text" name="descripcion" value="<?php echo $_POST['descripcion']; ?>">
+    <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+    <input type="text" name="nombre" value="<?php echo $_GET['nombre'] ?? ''; ?>">
     <br>
     <input type="submit" name="operacion" value="Actualizar">
     <input type="submit" name="operacion" value="Cancelar">

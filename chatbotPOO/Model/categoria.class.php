@@ -4,60 +4,83 @@ require_once "database.class.php";
 class Categoria {
     private $id;
     private $nombre;
-    private $descripcion;
 
-    public function __construct($id = null, $nombre = null, $descripcion = null) {
+    public function __construct($id = null, $nombre = null) {
         $this->id = $id;
         $this->nombre = $nombre;
-        $this->descripcion = $descripcion;
     }
 
     public function guardar() {
-    $sql = "INSERT INTO categorias (nombre, descripcion) VALUES (?, ?)";
-        $stmt = $conexion->prepare($sql);
-        //$stmt->bindParam(':nombre', $this->nombre);
-        //$stmt->bindParam(':descripcion', $this->descripcion);
-        return $stmt->execute([this->nombre, this->descripcion]);
-        //return $stmt->rowCount();   
-    }
-
-    public static function obtenerTodas() {
-        $sql = "SELECT * FROM categorias";
-        $conexion = Database::getConnection();
-        $stmt = $conexion->prepare($sql);
-        $stmt->execute();   
-        return $stmt->fetchAll();
-    }
-
-    public static function obtenerPorId($id) {
-        $conexion = Database::getConnection();
-        $sql = "SELECT * FROM categorias WHERE id = :id";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        return $stmt->fetch();
+        try {
+            $conexion = Database::getConnection();
+            $sql = "INSERT INTO categorias (nombre) VALUES (?)";
+            $stmt = $conexion->prepare($sql);
+            return $stmt->execute([$this->nombre]);
+        } catch (PDOException $e) {
+            echo "💥 Error en guardar(): " . $e->getMessage();
+            return false;
+        }
     }
 
     public function actualizar() {
-        $db = new Database();
-        $conexion = $db->getPDO();
-        $sql = "UPDATE categorias SET nombre = :nombre, descripcion = :descripcion WHERE id = :id";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':nombre', $this->nombre);
-        $stmt->bindParam(':descripcion', $this->descripcion);
-        $stmt->bindParam(':id', $this->id);
-        $stmt->execute();
-        return $stmt->rowCount();
+        try {
+            $conexion = Database::getConnection();
+            $sql = "UPDATE categorias SET nombre = :nombre WHERE id = :id";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bindParam(':nombre', $this->nombre);
+            $stmt->bindParam(':id', $this->id);
+            $stmt->execute();
+
+            if ($stmt->rowCount() === 0) {
+                echo "⚠️ Consulta ejecutada, pero no se modificó nada (quizás el nombre era igual).<br>";
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            echo "💥 Error en actualizar(): " . $e->getMessage();
+            return false;
+        }
     }
 
     public function eliminar() {
-        $db = new Database();
-        $conexion = $db->getPDO();
-        $sql = "DELETE FROM categorias WHERE id = :id";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':id', $this->id);
-        $stmt->execute();
-        return $stmt->rowCount();
+        try {
+            $conexion = Database::getConnection();
+            $sql = "DELETE FROM categorias WHERE id = :id";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bindParam(':id', $this->id);
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            echo "💥 Error en eliminar(): " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function obtenerTodas() {
+        try {
+            $conexion = Database::getConnection();
+            $sql = "SELECT * FROM categorias";
+            $stmt = $conexion->prepare($sql);
+            $stmt->execute();   
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "💥 Error en obtenerTodas(): " . $e->getMessage();
+            return [];
+        }
+    }
+
+    public static function obtenerPorId($id) {
+        try {
+            $conexion = Database::getConnection();
+            $sql = "SELECT * FROM categorias WHERE id = :id";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "💥 Error en obtenerPorId(): " . $e->getMessage();
+            return null;
+        }
     }
 }
 ?>
