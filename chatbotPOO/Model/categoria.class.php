@@ -62,7 +62,11 @@ class Categoria {
             $sql = "SELECT * FROM categorias";
             $stmt = $conexion->prepare($sql);
             $stmt->execute();   
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $categorias = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $categorias[] = new Categoria($row['id'], $row['nombre']);
+            }
+            return $categorias;
         } catch (PDOException $e) {
             echo "💥 Error en obtenerTodas(): " . $e->getMessage();
             return [];
@@ -76,11 +80,33 @@ class Categoria {
             $stmt = $conexion->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                return new Categoria($row['id'], $row['nombre']);
+            }
+            return null;
         } catch (PDOException $e) {
             echo "💥 Error en obtenerPorId(): " . $e->getMessage();
             return null;
         }
+    }
+
+    // Getters
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getNombre() {
+        return $this->nombre;
+    }
+
+    // Setters
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setNombre($nombre) {
+        $this->nombre = $nombre;
     }
 }
 ?>
