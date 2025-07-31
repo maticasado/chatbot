@@ -1,6 +1,6 @@
 <?php
 
-include "Model/rol.class.php";
+include_once "Model/rol.class.php";
 $roles = Rol::obtenerTodxs();
 ?>
 

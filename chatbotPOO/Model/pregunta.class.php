@@ -1,5 +1,5 @@
 <?php
-include "database.class.php";
+include_once "database.class.php";
 
 class Pregunta {
     private $id;

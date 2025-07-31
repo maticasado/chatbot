@@ -1,6 +1,6 @@
 <?php
 // Incluye la clase Database
-include "database.class.php"; 
+include_once "database.class.php"; 
 
 
 //Usamos el metodo sin crear el objeto

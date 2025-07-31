@@ -1,5 +1,5 @@
 <?php
-include (__DIR__ . '/../Model/rol.class.php');
+include_once (__DIR__ . '/../Model/rol.class.php');
     $operacion=$_POST['operacion'];
     if ($operacion=="guardar") {
         $rol= new Rol(null, $_POST['nombre']);

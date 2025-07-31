@@ -1,5 +1,5 @@
 <?php
-include "Model/rol.class.php";
+include_once "Model/rol.class.php";
 if(isset($_GET['id'])){
     $rol = Rol::obtenerPorId($_GET['id']);
     if (!$rol) {

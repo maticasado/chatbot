@@ -1,5 +1,5 @@
 <?php
-include (__DIR__ . '/../Model/pregunta.class.php');
+include_once (__DIR__ . '/../Model/pregunta.class.php');
 
 $operacion = $_POST['operacion'];
 $result = false;

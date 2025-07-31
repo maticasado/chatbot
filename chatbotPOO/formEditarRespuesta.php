@@ -1,5 +1,5 @@
 <?php
-include "Model/respuesta.class.php";
+include_once "Model/respuesta.class.php";
 
 if (isset($_GET['id'])) {
     $respuesta = Respuesta::obtenerPorId($_GET['id']);
