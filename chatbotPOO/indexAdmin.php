@@ -15,9 +15,8 @@
     
     <!-- Contenido principal -->
     <div class="container">
-        <h1>¡Bienvenido!</h1>
-        <p>Estamos encantados de tenerte aquí. Presiona el botón para comenzar a chatear con nosotros.</p>
-        <a href="inicio.php" class="btn">Comenzar</a>
+        <h1>¡Bienvenido administrador!</h1>
+        <a href="chat.php" class="btn">Comenzar</a>
     </div>
 </body>
 </html>
