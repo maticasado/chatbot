@@ -6,23 +6,6 @@ if (isset($_SESSION['usuario_id'])) {
     header("Location: index.php");
     exit();
 }
-
-// Procesar el formulario de login
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-    
-    // Aquí iría la validación real con la base de datos
-    // Por ahora, un ejemplo simple
-    if ($username === 'admin' && $password === 'admin') {
-        $_SESSION['usuario_id'] = 1;
-        $_SESSION['usuario_nombre'] = 'Administrador';
-        header("Location: indexAdmin.php");
-        exit();
-    } else {
-        $error = "Usuario o contraseña incorrectos";
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -55,17 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <i class="fas fa-lock"></i>
             </div>
             <h2>Iniciar Sesión</h2>
-            
-            <?php if (isset($error)): ?>
+
+            <?php if (isset($_GET['error'])): ?>
                 <div class="error-message">
-                    <i class="fas fa-exclamation-circle"></i> <?php echo $error; ?>
+                    <i class="fas fa-exclamation-circle"></i> <?= htmlspecialchars($_GET['error']) ?>
                 </div>
             <?php endif; ?>
             
-            <form method="POST" action="">
+            <form method="POST" action="Controller/login.controller.php">
                 <div class="form-group">
-                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
-                    <input type="text" id="username" name="username" required placeholder="Ingresa tu usuario">
+                    <label for="usuario"><i class="fas fa-user"></i> Usuario</label>
+                    <input type="text" id="usuario" name="usuario" required placeholder="Ingresa tu usuario">
                 </div>
                 
                 <div class="form-group">

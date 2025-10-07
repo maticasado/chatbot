@@ -1,47 +1,41 @@
 <?php
+// database.class.php
 class Database {
-    // Instancia única (singleton)
-    private static $instancia = null;
+    private static $instance = null;
+    private $connection;
 
-    // Atributos de conexión
-    private $nombre = "chatbot_2";
-    private $servidor = "localhost";
-    private $usuario = "root";
-    private $clave = "";
-    private $conexion;
+    private $host = 'localhost';
+    private $db   = 'chatbot_2';   // <-- asegurate que la BD con el admin exista aquí
+    private $user = 'root';
+    private $pass = '';
 
-    // Constructor privado: establece conexión usando PDO
-    public function getPDO() {
-        return $this->conexion;
-    }
-        
-    public function __construct() {
+    private function __construct() {
+        $dsn = "mysql:host={$this->host};dbname={$this->db};charset=utf8mb4";
         try {
-            $dsn = "mysql:host={$this->servidor};dbname={$this->nombre};charset=utf8";
-            $this->conexion = new PDO($dsn, $this->usuario, $this->clave);
-            $this->conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // corregido ATR_ERRMODE
+            $this->connection = new PDO($dsn, $this->user, $this->pass);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connection->exec("SET NAMES utf8mb4");
         } catch (PDOException $e) {
-            die("Error de conexión: " . $e->getMessage()); // corregido $e_> por $e->
+            die("Error de conexión: " . $e->getMessage());
         }
     }
 
-    // Patrón singleton: retorna una sola instancia de Database
+    // Singleton
     public static function getInstance() {
-        if (!self::$instancia) {
-            self::$instancia = new Database();
+        if (self::$instance === null) {
+            self::$instance = new Database();
         }
-        return self::$instancia;
+        return self::$instance;
     }
 
-    // Devuelve la conexión PDO
-    public static function getConnection() {
-        return self::getInstance()->conexion;
+    // Devuelve la conexión PDO (instancia)
+    public function getConnection() {
+        return $this->connection;
     }
-     
 
-    // Métodos vacíos para ejecutar consultas
-    public function execute() {}
-
-    public function query() {}
+    // Helper estático para obtener PDO directamente
+    public static function getPDO() {
+        return self::getInstance()->getConnection();
+    }
 }
 ?>
