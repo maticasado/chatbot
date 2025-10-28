@@ -56,23 +56,22 @@ class Categoria {
         }
     }
 
-    public static function obtenerTodas() {
-        try {
-            $conexion = Database::getConnection();
-            $sql = "SELECT * FROM categorias";
-            $stmt = $conexion->prepare($sql);
-            $stmt->execute();   
-            $categorias = [];
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $categorias[] = new Categoria($row['id'], $row['nombre']);
-            }
-            return $categorias;
-        } catch (PDOException $e) {
-            echo "💥 Error en obtenerTodas(): " . $e->getMessage();
-            return [];
+   public static function obtenerTodas() {
+    try {
+        $conexion = Database::getInstance()->getConnection(); // Obtener la conexión desde el método getInstance
+        $sql = "SELECT * FROM categorias";
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute();   
+        $categorias = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $categorias[] = new Categoria($row['id'], $row['nombre']);
         }
+        return $categorias;
+    } catch (PDOException $e) {
+        echo "💥 Error en obtenerTodas(): " . $e->getMessage();
+        return [];
     }
-
+}
     public static function obtenerPorId($id) {
         try {
             $conexion = Database::getConnection();

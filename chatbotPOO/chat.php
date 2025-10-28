@@ -23,12 +23,12 @@ if (!isset($_SESSION['usuario_id'])) {
 <body>
 
 <header>
-    <a href="<?php echo isset($_SESSION['usuario_id']) ? 'logout.php' : 'login.php'; ?>" class="login-btn">
+    <a href="<?php echo isset($_SESSION['usuario_id']) ? 'logout.php' : 'login.php'; ?>" class="login-btn" aria-label="Acceder a la cuenta">
         <i class="fas <?php echo isset($_SESSION['usuario_id']) ? 'fa-sign-out-alt' : 'fa-sign-in-alt'; ?>"></i> 
         <?php echo isset($_SESSION['usuario_id']) ? 'Cerrar Sesión' : 'Iniciar Sesión'; ?>
     </a>
     <div class="logo-container">
-        <div class="logo">
+        <div class="logo" aria-label="Logo CodeGol">
             <i class="fas fa-robot"></i>
         </div>
         <div>
@@ -39,31 +39,37 @@ if (!isset($_SESSION['usuario_id'])) {
 </header>
 
 <nav>
-    <a href="chat.php"><i class="fas fa-home"></i> Inicio</a>
-    <a href="Categoria/listarCategoria.php"><i class="fas fa-folder"></i> Categoria</a>
-    <a href="listarPregunta.php"><i class="fas fa-question-circle"></i> Pregunta</a>
-    <a href="listarRespuesta.php"><i class="fas fa-comment"></i> Respuesta</a>
+    <a href="chat.php" aria-label="Ir al inicio"><i class="fas fa-home"></i> Inicio</a>
+    <a href="Categoria/listarCategoria.php" aria-label="Ir a categorías"><i class="fas fa-folder"></i> Categoria</a>
+    <a href="listarPregunta.php" aria-label="Ir a preguntas"><i class="fas fa-question-circle"></i> Pregunta</a>
+    <a href="listarRespuesta.php" aria-label="Ir a respuestas"><i class="fas fa-comment"></i> Respuesta</a>
 </nav>
 
 <main>
-    <section class="chatbot">
+    <section class="chatbot" aria-labelledby="chatbot-title">
         <div>
-            <h3><i class="fas fa-comments"></i> Chatea con CodeGol</h3>
+            <!-- Corregir jerarquía de encabezados -->
+            <h2 id="chatbot-title"><i class="fas fa-comments"></i> Chat con CodeGol</h2>
             <p>Hola, soy CodeGol, tu asistente virtual. Estoy aquí para ayudarte a resolver tus dudas técnicas.</p>
         </div>
     </section>
-        <div class="chat-container">
-            <div class="chat-box" id="chatBox">
-                <div class="chat-message bot">
-                    ¡Hola! Soy CodeGol, tu asistente virtual. ¿En qué puedo ayudarte hoy?
-                </div>
-            </div>
 
-            <form class="chat-input" id="chatForm">
-                <input type="text" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
-                <button type="submit"><i class="fas fa-paper-plane"></i> Enviar</button>
-            </form>
+    <div class="chat-container">
+        <div class="chat-box" id="chatBox" role="log">
+            <div class="chat-message bot">
+                ¡Hola! Soy CodeGol, tu asistente virtual. ¿En qué puedo ayudarte hoy?
+            </div>
         </div>
+
+        <form class="chat-input" id="chatForm" role="form">
+            <!-- Agregar label accesible para el campo de mensaje -->
+            <label for="mensaje" class="sr-only">Escribe tu mensaje aquí:</label>
+            <input type="text" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." autocomplete="off" aria-label="Campo de mensaje">
+            <button type="submit" aria-label="Enviar mensaje">
+                <i class="fas fa-paper-plane"></i> Enviar
+            </button>
+        </form>
+    </div>
 </main>
 
 <footer>
@@ -73,50 +79,4 @@ if (!isset($_SESSION['usuario_id'])) {
 <script>
 $(document).ready(function(){
     // Función para hacer scroll al final del chat
-    function scrollToBottom() {
-        const chatBox = document.getElementById('chatBox');
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-    
-    // Enviar mensaje al hacer submit en el formulario
-    $("#chatForm").on("submit", function(e){
-        e.preventDefault();
-        
-        let mensaje = $("#mensaje").val().trim();
-        if(mensaje === ""){
-            alert("Por favor, escribe un mensaje antes de enviar.");
-            return;
-        }
-        
-        // Agregar mensaje del usuario al chat
-        let userMsg = '<div class="chat-message user">' + mensaje + '</div>';
-        $("#chatBox").append(userMsg);
-        $("#mensaje").val('');
-        scrollToBottom();
-        
-        // Enviar mensaje al servidor
-        $.ajax({
-            url: 'Controller/controlador.php',
-            type: 'POST',
-            data: { text: mensaje },
-            success: function(respuesta){
-                // Agregar respuesta del bot al chat
-                let botMsg = '<div class="chat-message bot">' + respuesta + '</div>';
-                $("#chatBox").append(botMsg);
-                scrollToBottom();
-            },
-            error: function(){
-                let errorMsg = '<div class="chat-message bot">Lo siento, ha ocurrido un error. Por favor, intenta nuevamente.</div>';
-                $("#chatBox").append(errorMsg);
-                scrollToBottom();
-            }
-        });
-    });
-    
-    // Focus en el input al cargar la página
-    $("#mensaje").focus();
-});
-</script>
-
-</body>
-</html>
+    function scrol

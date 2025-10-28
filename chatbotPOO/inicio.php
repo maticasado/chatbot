@@ -23,12 +23,12 @@ if (!isset($_SESSION['usuario_id'])) {
 <body>
 
 <header>
-    <a href="<?php echo isset($_SESSION['usuario_id']) ? 'logout.php' : 'login.php'; ?>" class="login-btn">
+    <a href="<?php echo isset($_SESSION['usuario_id']) ? 'logout.php' : 'login.php'; ?>" class="login-btn" aria-label="Acceder a la cuenta">
         <i class="fas <?php echo isset($_SESSION['usuario_id']) ? 'fa-sign-out-alt' : 'fa-sign-in-alt'; ?>"></i> 
         <?php echo isset($_SESSION['usuario_id']) ? 'Cerrar Sesión' : 'Iniciar Sesión'; ?>
     </a>
     <div class="logo-container">
-        <div class="logo">
+        <div class="logo" aria-label="Logo CodeGol">
             <i class="fas fa-robot"></i>
         </div>
         <div>
@@ -37,25 +37,32 @@ if (!isset($_SESSION['usuario_id'])) {
         </div>
     </div>
 </header>
+
 <main>
-    <section class="chatbot">
+    <section class="chatbot" aria-labelledby="chatbot-title">
         <div>
-            <h3><i class="fas fa-comments"></i> Chatea con CodeGol</h3>
+            <!-- Corregir jerarquía de encabezados -->
+            <h2 id="chatbot-title"><i class="fas fa-comments"></i> Chat con CodeGol</h2>
             <p>Hola, soy CodeGol, tu asistente virtual. Estoy aquí para ayudarte a resolver tus dudas técnicas.</p>
         </div>
     </section>
-        <div class="chat-container">
-            <div class="chat-box" id="chatBox">
-                <div class="chat-message bot">
-                    ¡Hola! Soy CodeGol, tu asistente virtual. ¿En qué puedo ayudarte hoy?
-                </div>
-            </div>
 
-            <form class="chat-input" id="chatForm">
-                <input type="text" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
-                <button type="submit"><i class="fas fa-paper-plane"></i> Enviar</button>
-            </form>
+    <div class="chat-container">
+        <div class="chat-box" id="chatBox" role="log">
+            <div class="chat-message bot">
+                ¡Hola! Soy CodeGol, tu asistente virtual. ¿En qué puedo ayudarte hoy?
+            </div>
         </div>
+
+        <form class="chat-input" id="chatForm" role="form">
+            <!-- Agregar label accesible para el campo de mensaje -->
+            <label for="mensaje" class="sr-only">Escribe tu mensaje aquí:</label>
+            <input type="text" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." autocomplete="off" aria-label="Campo de mensaje">
+            <button type="submit" aria-label="Enviar mensaje">
+                <i class="fas fa-paper-plane"></i> Enviar
+            </button>
+        </form>
+    </div>
 </main>
 
 <footer>
@@ -69,7 +76,7 @@ $(document).ready(function(){
         const chatBox = document.getElementById('chatBox');
         chatBox.scrollTop = chatBox.scrollHeight;
     }
-    
+
     // Enviar mensaje al hacer submit en el formulario
     $("#chatForm").on("submit", function(e){
         e.preventDefault();
@@ -109,6 +116,5 @@ $(document).ready(function(){
     $("#mensaje").focus();
 });
 </script>
-
 </body>
 </html>
