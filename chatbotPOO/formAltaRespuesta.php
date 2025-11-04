@@ -23,9 +23,13 @@
     </nav>
 <form name="formAltaRespuesta" method="post" action="Controller/respuesta.controller.php">
     <input type="hidden" name="operacion" value="guardar"/>
-    <label>Respuesta:</label>
-    <input type="text" name="respuesta" required>
-    <label>Pregunta (ID):</label>
-    <input type="number" name="pregunta" required>
+
+    <label for="respuesta">Respuesta:</label>
+    <input type="text" id="respuesta" name="respuesta" required>
+
+    <label for="pregunta">Pregunta (ID):</label>
+    <input type="number" id="pregunta" name="pregunta" required>
+
     <input type="submit" value="Aceptar">
 </form>
+

@@ -2,7 +2,7 @@
 // Iniciar sesión si es necesario
 session_start();
 
-// Verificar si el usuario ha iniciado sesión (opcional, dependiendo de tus requisitos)
+// Verificar si el usuario ha iniciado sesión (opcional)
 /*
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
@@ -30,7 +30,7 @@ if (!isset($_SESSION['usuario_id'])) {
     </a>
     <div class="logo-container">
         <div class="logo">
-            <i class="fas fa-robot"></i>
+            <i class="fas fa-robot" aria-hidden="true"></i>
         </div>
         <div>
             <h1>CodeGol</h1>
@@ -40,10 +40,10 @@ if (!isset($_SESSION['usuario_id'])) {
 </header>
 
 <nav>
-    <a href="chat.php"><i class="fas fa-home"></i> Inicio</a>
-    <a href="Categoria/listarCategoria.php"><i class="fas fa-folder"></i> Categoria</a>
-    <a href="listarPregunta.php"><i class="fas fa-question-circle"></i> Pregunta</a>
-    <a href="listarRespuesta.php"><i class="fas fa-comment"></i> Respuesta</a>
+    <a href="chat.php"><i class="fas fa-home" aria-hidden="true"></i> Inicio</a>
+    <a href="Categoria/listarCategoria.php"><i class="fas fa-folder" aria-hidden="true"></i> Categoría</a>
+    <a href="listarPregunta.php"><i class="fas fa-question-circle" aria-hidden="true"></i> Pregunta</a>
+    <a href="listarRespuesta.php"><i class="fas fa-comment" aria-hidden="true"></i> Respuesta</a>
 </nav>
 
 <?php
@@ -51,14 +51,23 @@ include_once "Model/respuesta.class.php";
 $respuestas = Respuesta::obtenerTodas();
 ?>
 
-<h2 style="text-align: center;">Lista de Respuestas</h2>
-
-<div class="search-container">
-    <div class="search-box">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Buscar respuesta...">
+<div class="header-container">
+    <h2>Lista de Respuestas</h2>
+    <div class="search-container">
+        <div class="search-box">
+            <label for="searchInput" class="visually-hidden">Buscar respuesta</label>
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Buscar respuesta..." 
+                aria-label="Buscar respuesta"
+            >
+        </div>
+        <a href="formAltaRespuesta.php" class="btn-new" aria-label="Agregar nueva respuesta">
+            <i class="fas fa-plus" aria-hidden="true"></i> Nueva Respuesta
+        </a>
     </div>
-    <a href="formAltaRespuesta.php" class="btn-new">Nueva Respuesta</a>
 </div>
 
 <?php
@@ -70,24 +79,34 @@ if ($respuestas == null) {
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Respuesta</th>
-                <th>Pregunta (ID)</th>
-                <th>Acciones</th>
+                <th scope="col">ID</th>
+                <th scope="col">Respuesta</th>
+                <th scope="col">Pregunta (ID)</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($respuestas as $respuesta) { ?>
             <tr>
-                <td><?= $respuesta['id'] ?></td>
-                <td><?= $respuesta['respuesta'] ?></td>
-                <td><?= $respuesta['pregunta_id'] ?></td>
-                <td>
-                    <a href="formEditarRespuesta.php?id=<?= $respuesta['id'] ?>" class="action-btn edit-btn" title="Editar">☑</a>
+                <td><?= htmlspecialchars($respuesta['id']) ?></td>
+                <td><?= htmlspecialchars($respuesta['respuesta']) ?></td>
+                <td><?= htmlspecialchars($respuesta['pregunta_id']) ?></td>
+                <td class="action-buttons">
+                    <a href="formEditarRespuesta.php?id=<?= $respuesta['id'] ?>" 
+                       class="action-btn edit-btn" 
+                       aria-label="Editar respuesta <?= $respuesta['id'] ?>">
+                       <i class="fas fa-edit" aria-hidden="true"></i>
+                    </a>
                     <form action="Controller/respuesta.controller.php" method="post" class="action-form">
                         <input type="hidden" name="operacion" value="eliminar">
                         <input type="hidden" name="id" value="<?= $respuesta['id'] ?>">
-                        <button type="submit" onclick="return confirm('¿Está seguro de eliminar esta respuesta?')" class="action-btn delete-btn" title="Eliminar">█</button>
+                        <button 
+                            type="submit" 
+                            onclick="return confirm('¿Está seguro de eliminar esta respuesta?')" 
+                            class="action-btn delete-btn"
+                            aria-label="Eliminar respuesta <?= $respuesta['id'] ?>">
+                            <i class="fas fa-trash" aria-hidden="true"></i>
+                        </button>
                     </form>
                 </td>
             </tr>
@@ -98,14 +117,14 @@ if ($respuestas == null) {
 <?php } ?>
 
 <script>
-    $(document).ready(function(){
-        $("#searchInput").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("table tbody tr").filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+$(document).ready(function(){
+    $("#searchInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("table tbody tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
+});
 </script>
 
 </body>

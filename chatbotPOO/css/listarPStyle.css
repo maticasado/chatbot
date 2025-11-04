@@ -17,15 +17,22 @@
             border-radius: 4px;
             margin-right: 10px;
         }
-        
-        .btn-new {
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 15px;
+            
+        .btn-new{
+            background-color: #8ace7e; /* verde más oscuro, mejor contraste */
+            color: #000000;
+            padding: 10px 18px;
+            border-radius: 6px;
             text-decoration: none;
-            border-radius: 4px;
+            font-weight: 600;
             display: inline-block;
+            transition: background-color 0.3s;
         }
+
+        .btn-new:hover {
+            background-color: #155d27; /* tono más oscuro al pasar el mouse */
+        }
+
         
         table {
             width: 90%;

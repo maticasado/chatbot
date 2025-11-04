@@ -16,8 +16,8 @@ if (!isset($_SESSION['usuario_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat - CodeGol</title>
-    <link rel="stylesheet" href="css/styleIndex.css">
     <link rel="stylesheet" href="css/listarPStyle.css">
+    <link rel="stylesheet" href="css/styleIndex.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -54,6 +54,7 @@ $preguntas = Pregunta::obtenerTodas();
 <div class="header-container">
     <h2>Lista de Preguntas</h2>
     <div class="search-container">
+        <label for="searchInput" class="sr-only">Buscar pregunta</label>
         <input type="text" id="searchInput" class="search-box" placeholder="Buscar pregunta...">
         <a href="formAltaPregunta.php" class="btn-new">+ Nueva Pregunta</a>
     </div>
@@ -94,15 +95,14 @@ if ($preguntas == null) {
 <?php } ?>
 
 <script>
-    // Función de búsqueda
-    $(document).ready(function(){
-        $("#searchInput").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("table tbody tr").filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+$(document).ready(function(){
+    $("#searchInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("table tbody tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
+});
 </script>
 
 </body>
