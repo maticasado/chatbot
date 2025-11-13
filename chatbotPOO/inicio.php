@@ -61,6 +61,9 @@ if (!isset($_SESSION['usuario_id'])) {
             <button type="submit" aria-label="Enviar mensaje">
                 <i class="fas fa-paper-plane"></i> Enviar
             </button>
+            <button type="button" id="hablarBtn" aria-label="Hablar mensaje">
+                <i class="fas fa-microphone"></i> Hablar
+            </button>
         </form>
     </div>
 </main>
@@ -103,6 +106,8 @@ $(document).ready(function(){
                 let botMsg = '<div class="chat-message bot">' + respuesta + '</div>';
                 $("#chatBox").append(botMsg);
                 scrollToBottom();
+                // Aquí añadimos la salida de voz
+                respuestaBot(respuesta);
             },
             error: function(){
                 let errorMsg = '<div class="chat-message bot">Lo siento, ha ocurrido un error. Por favor, intenta nuevamente.</div>';
@@ -114,6 +119,47 @@ $(document).ready(function(){
     
     // Focus en el input al cargar la página
     $("#mensaje").focus();
+
+    // Activar el reconocimiento de voz al presionar el botón "Hablar"
+    $("#hablarBtn").on("click", function() {
+        iniciarReconocimiento();
+    });
+
+    // Activar reconocimiento de voz
+    var recognition;
+    function iniciarReconocimiento() {
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'es-ES';
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                console.log("Reconociendo voz...");
+            };
+
+            recognition.onresult = function(event) {
+                var resultado = event.results[0][0].transcript;
+                document.getElementById("mensaje").value = resultado;
+                enviarMensaje();
+            };
+
+            recognition.onerror = function(event) {
+                console.log("Error de reconocimiento: " + event.error);
+            };
+
+            recognition.start();
+        } else {
+            alert("Tu navegador no soporta la funcionalidad de voz.");
+        }
+    }
+
+    // Función para que el bot hable
+    function respuestaBot(mensaje) {
+        var mensajeVoz = new SpeechSynthesisUtterance(mensaje);
+        mensajeVoz.lang = "es-ES";  // Para que hable en español
+        window.speechSynthesis.speak(mensajeVoz);
+    }
 });
 </script>
 </body>
