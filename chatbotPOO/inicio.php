@@ -1,14 +1,5 @@
 <?php
-// Iniciar sesión si es necesario
 session_start();
-
-// Verificar si el usuario ha iniciado sesión (opcional, dependiendo de tus requisitos)
-/*
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
-    exit();
-}
-*/
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -23,14 +14,12 @@ if (!isset($_SESSION['usuario_id'])) {
 <body>
 
 <header>
-    <a href="<?php echo isset($_SESSION['usuario_id']) ? 'logout.php' : 'login.php'; ?>" class="login-btn" aria-label="Acceder a la cuenta">
+    <a href="<?php echo isset($_SESSION['usuario_id']) ? 'logout.php' : 'login.php'; ?>" class="login-btn">
         <i class="fas <?php echo isset($_SESSION['usuario_id']) ? 'fa-sign-out-alt' : 'fa-sign-in-alt'; ?>"></i> 
         <?php echo isset($_SESSION['usuario_id']) ? 'Cerrar Sesión' : 'Iniciar Sesión'; ?>
     </a>
     <div class="logo-container">
-        <div class="logo" aria-label="Logo CodeGol">
-            <i class="fas fa-robot"></i>
-        </div>
+        <div class="logo"><i class="fas fa-robot"></i></div>
         <div>
             <h1>CodeGol</h1>
             <p class="tagline">Tu asistente virtual de confianza</p>
@@ -39,29 +28,26 @@ if (!isset($_SESSION['usuario_id'])) {
 </header>
 
 <main>
-    <section class="chatbot" aria-labelledby="chatbot-title">
-        <div>
-            <!-- Corregir jerarquía de encabezados -->
-            <h2 id="chatbot-title"><i class="fas fa-comments"></i> Chat con CodeGol</h2>
-            <p>Hola, soy CodeGol, tu asistente virtual. Estoy aquí para ayudarte a resolver tus dudas técnicas.</p>
-        </div>
+    <section class="chatbot">
+        <h2><i class="fas fa-comments"></i> Chat con CodeGol</h2>
+        <p>Hola, soy CodeGol, tu asistente virtual. ¿En qué puedo ayudarte hoy?</p>
     </section>
 
     <div class="chat-container">
-        <div class="chat-box" id="chatBox" role="log">
+        <div class="chat-box" id="chatBox">
             <div class="chat-message bot">
                 ¡Hola! Soy CodeGol, tu asistente virtual. ¿En qué puedo ayudarte hoy?
             </div>
         </div>
 
-        <form class="chat-input" id="chatForm" role="form">
-            <!-- Agregar label accesible para el campo de mensaje -->
-            <label for="mensaje" class="sr-only">Escribe tu mensaje aquí:</label>
-            <input type="text" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." autocomplete="off" aria-label="Campo de mensaje">
-            <button type="submit" aria-label="Enviar mensaje">
+        <form class="chat-input" id="chatForm">
+            <input type="text" id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
+            
+            <button type="submit">
                 <i class="fas fa-paper-plane"></i> Enviar
             </button>
-            <button type="button" id="hablarBtn" aria-label="Hablar mensaje">
+
+            <button type="button" id="hablarBtn">
                 <i class="fas fa-microphone"></i> Hablar
             </button>
         </form>
@@ -72,95 +58,129 @@ if (!isset($_SESSION['usuario_id'])) {
     <p>&copy; 2025 - 7°I - E.P.E.T N°3 - Todos los derechos reservados.</p>
 </footer>
 
+<!-- ========================= -->
+<!--   SCRIPT COMPLETO FINAL   -->
+<!-- ========================= -->
+
 <script>
 $(document).ready(function(){
-    // Función para hacer scroll al final del chat
-    function scrollToBottom() {
-        const chatBox = document.getElementById('chatBox');
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
 
-    // Enviar mensaje al hacer submit en el formulario
-    $("#chatForm").on("submit", function(e){
-        e.preventDefault();
-        
+    // ==========================
+    // FUNCIÓN PARA ENVIAR TEXTO
+    // ==========================
+    function enviarMensaje() {
         let mensaje = $("#mensaje").val().trim();
+
         if(mensaje === ""){
             alert("Por favor, escribe un mensaje antes de enviar.");
             return;
         }
-        
-        // Agregar mensaje del usuario al chat
-        let userMsg = '<div class="chat-message user">' + mensaje + '</div>';
-        $("#chatBox").append(userMsg);
-        $("#mensaje").val('');
+
+        // Muestra mensaje del usuario
+        $("#chatBox").append('<div class="chat-message user">' + mensaje + '</div>');
         scrollToBottom();
-        
-        // Enviar mensaje al servidor
+
+        // Limpia el input
+        $("#mensaje").val('');
+
+        // Enviar al servidor
         $.ajax({
             url: 'Controller/controlador.php',
             type: 'POST',
             data: { text: mensaje },
             success: function(respuesta){
-                // Agregar respuesta del bot al chat
-                let botMsg = '<div class="chat-message bot">' + respuesta + '</div>';
-                $("#chatBox").append(botMsg);
+                $("#chatBox").append('<div class="chat-message bot">' + respuesta + '</div>');
                 scrollToBottom();
-                // Aquí añadimos la salida de voz
-                respuestaBot(respuesta);
+                respuestaBot(respuesta); // HABLA
             },
             error: function(){
-                let errorMsg = '<div class="chat-message bot">Lo siento, ha ocurrido un error. Por favor, intenta nuevamente.</div>';
-                $("#chatBox").append(errorMsg);
+                $("#chatBox").append('<div class="chat-message bot">Lo siento, ocurrió un error.</div>');
                 scrollToBottom();
             }
         });
-    });
-    
-    // Focus en el input al cargar la página
-    $("#mensaje").focus();
+    }
 
-    // Activar el reconocimiento de voz al presionar el botón "Hablar"
+    // ==========================
+    // AUTOSCROLL
+    // ==========================
+    function scrollToBottom() {
+        let chatBox = document.getElementById("chatBox");
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // ==========================
+    // FORMULARIO ENVÍA MENSAJE
+    // ==========================
+    $("#chatForm").on("submit", function(e){
+        e.preventDefault();
+        enviarMensaje();
+    });
+
+
+    // ==========================
+    // BOTÓN HABLAR
+    // ==========================
     $("#hablarBtn").on("click", function() {
         iniciarReconocimiento();
     });
 
-    // Activar reconocimiento de voz
-    var recognition;
+
+    // ==========================
+    // RECONOCIMIENTO DE VOZ
+    // ==========================
+    let recognition;
+
     function iniciarReconocimiento() {
-        if ('webkitSpeechRecognition' in window) {
-            recognition = new webkitSpeechRecognition();
-            recognition.continuous = false;
-            recognition.lang = 'es-ES';
-            recognition.interimResults = false;
 
-            recognition.onstart = function() {
-                console.log("Reconociendo voz...");
-            };
-
-            recognition.onresult = function(event) {
-                var resultado = event.results[0][0].transcript;
-                document.getElementById("mensaje").value = resultado;
-                enviarMensaje();
-            };
-
-            recognition.onerror = function(event) {
-                console.log("Error de reconocimiento: " + event.error);
-            };
-
-            recognition.start();
-        } else {
-            alert("Tu navegador no soporta la funcionalidad de voz.");
+        if (!('webkitSpeechRecognition' in window)) {
+            alert("Tu navegador NO soporta reconocimiento de voz.");
+            return;
         }
+
+        recognition = new webkitSpeechRecognition();
+
+        recognition.lang = "es-ES";   // puedes usar "es-AR" si querés
+        recognition.continuous = false;
+        recognition.interimResults = true;
+
+        recognition.onstart = () => console.log("🎤 Escuchando...");
+
+        // --- ARREGLO IMPORTANTE ---
+        recognition.onresult = function(event) {
+            let resultado = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                resultado += event.results[i][0].transcript;
+            }
+
+            console.log("Texto detectado:", resultado);
+
+            // ESCRIBIR EN EL INPUT
+            $("#mensaje").val(resultado);
+
+            // ENVIAR AUTOMÁTICAMENTE
+            if(event.results[event.results.length - 1].isFinal){
+                enviarMensaje();
+            }
+        };
+
+        recognition.onerror = event => console.log("Error:", event.error);
+
+        recognition.start();
     }
 
-    // Función para que el bot hable
+
+    // ==========================
+    // RESPUESTA DEL BOT HABLADA
+    // ==========================
     function respuestaBot(mensaje) {
-        var mensajeVoz = new SpeechSynthesisUtterance(mensaje);
-        mensajeVoz.lang = "es-ES";  // Para que hable en español
+        let mensajeVoz = new SpeechSynthesisUtterance(mensaje);
+        mensajeVoz.lang = "es-ES";
         window.speechSynthesis.speak(mensajeVoz);
     }
+
 });
 </script>
+
 </body>
 </html>
